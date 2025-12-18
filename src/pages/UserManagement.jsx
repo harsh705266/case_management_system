@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { users as initialUsers } from '../data/mockData';
-import { Search, User, Shield, Mail } from 'lucide-react';
+import { useUsers } from '../context/UserContext';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Search, User, Shield, Mail, Plus } from 'lucide-react';
 
 const UserManagement = () => {
-  const [users, setUsers] = useState(initialUsers);
+  const { users } = useUsers();
+  const { user: currentUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = users.filter(u =>
     u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     u.role.toLowerCase().includes(searchTerm.toLowerCase())
@@ -14,17 +20,39 @@ const UserManagement = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+
+      {/* Success Message from NewUser */}
+      {location.state?.message && (
+        <div className="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded">
+          {location.state.message}
+        </div>
+      )}
+
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-2xl font-bold text-gray-800">User Management</h2>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search users..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
-          />
+
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-64"
+            />
+          </div>
+
+          {/* Only Admin can add users */}
+          {currentUser?.role === 'Admin' && (
+            <button
+              onClick={() => navigate("/users/new")}
+              className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+            >
+              <Plus size={18} />
+              <span className="hidden sm:inline">New User</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -66,6 +94,13 @@ const UserManagement = () => {
                 </td>
               </tr>
             ))}
+            {filteredUsers.length === 0 && (
+              <tr>
+                <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
+                  No users found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -11,12 +11,12 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (login(email, password)) {
       navigate(from, { replace: true });
     } else {
@@ -35,9 +35,10 @@ const Login = () => {
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
         <div className="bg-indigo-600 p-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
-          <p className="text-indigo-100">Sign in to access the Case Management System</p>
+          <p className="text-indigo-100 mb-4">Sign in to access the Case Management System</p>
+          <a href="/" className="text-xs text-indigo-200 hover:text-white transition-colors underline">← Back to Home</a>
         </div>
-        
+
         <div className="p-8">
           {error && (
             <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 flex items-center gap-3">

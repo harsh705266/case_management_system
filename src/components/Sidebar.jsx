@@ -39,7 +39,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 text-white h-screen flex flex-col fixed left-0 top-0 bottom-0 z-10">
+    <aside className="w-64 bg-slate-900 text-white min-h-screen flex flex-col z-10 shrink-0">
       <div className="h-16 flex items-center px-6 border-b border-slate-800">
         <span className="text-lg font-bold tracking-wide text-indigo-400">CMS Portal</span>
       </div>
@@ -49,10 +49,9 @@ const Sidebar = () => {
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
-                isActive
-                  ? 'bg-indigo-600 text-white'
-                  : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${isActive
+                ? 'bg-indigo-600 text-white'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
               }`
             }
           >

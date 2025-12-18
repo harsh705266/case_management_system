@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { users } from '../data/mockData';
+import { useUsers } from './UserContext';
 
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const { users } = useUsers();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
